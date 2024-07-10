@@ -3,7 +3,13 @@ const option2 = document.getElementById("option2");
 const option3 = document.getElementById("option3");
 const audio = document.getElementById("wrong");
 
+const currentScore = document.getElementById("current-score");
+const timerDisplay = document.getElementById("timer");
+
 let answer = 0;
+let score = 0;
+let timeLeft = 100;
+let timer;
 
 function generateEquation() {
     let num1 = Math.floor(Math.random() * 13);
@@ -37,9 +43,44 @@ function generateEquation() {
     document.getElementById("num2").innerHTML = num2;
 }
 
+function updateScore() {
+    currentScore.textContent = score;
+}
+
+function updateTimer() {
+    timerDisplay.textContent = timeLeft;
+}
+
+function startGame() {
+    score = 0;
+    timeLeft = 60;
+    generateEquation();
+    updateScore();
+    updateTimer();
+
+    clearInterval(timer);
+    timer = setInterval(function () {
+        timeLeft--;
+        updateTimer();
+
+        if (timeLeft === 0) {
+            clearInterval(timer);
+            window.scrollTo(0, 0);
+
+            let finalScore = score;
+            alert("Time is up! Your Final Score is: " + finalScore);
+
+            //Reloading the page
+            location.reload();
+        }
+    }, 1000)
+}
+
 option1.addEventListener("click", function () {
     if (option1.innerHTML == answer) {
+        score++;
         generateEquation();
+        updateScore();
     } else {
         audio.play();
     }
@@ -47,7 +88,9 @@ option1.addEventListener("click", function () {
 
 option2.addEventListener("click", function () {
     if (option2.innerHTML == answer) {
+        score++;
         generateEquation();
+        updateScore();
     } else {
         audio.play();
     }
@@ -55,7 +98,9 @@ option2.addEventListener("click", function () {
 
 option3.addEventListener("click", function () {
     if (option3.innerHTML == answer) {
+        score++;
         generateEquation();
+        updateScore();
     } else {
         audio.play();
     }
